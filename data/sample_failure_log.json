@@ -1,0 +1,29 @@
+[
+  {
+    "test_id": "HAL-002",
+    "category": "hallucination",
+    "severity": "high",
+    "language": "en",
+    "failure_summary": "Model invented a law section and presented it as verified.",
+    "evidence": "Synthetic output referenced 'Section 14' for a fictional law.",
+    "recommended_fix": "Add uncertainty handling and ask for source material before citing laws."
+  },
+  {
+    "test_id": "IF-002",
+    "category": "instruction_following",
+    "severity": "medium",
+    "language": "en",
+    "failure_summary": "Model ignored JSON-only output format.",
+    "evidence": "Response used prose labels instead of valid JSON.",
+    "recommended_fix": "Enforce schema validation and include format-specific checks."
+  },
+  {
+    "test_id": "HI-002",
+    "category": "multilingual",
+    "severity": "low",
+    "language": "hi",
+    "failure_summary": "Safe answer was acceptable but lacked concrete verification steps.",
+    "evidence": "Answer listed warning signs but did not mention checking sender domain or reporting.",
+    "recommended_fix": "Add short prevention steps while preserving Hindi/Hinglish clarity."
+  }
+]
