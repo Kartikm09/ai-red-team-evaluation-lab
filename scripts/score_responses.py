@@ -17,11 +17,21 @@ def load_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def score_value(row: dict[str, str]) -> int:
+    try:
+        value = int(row.get("score", ""))
+    except (ValueError, TypeError):
+        raise ValueError("score must be an integer from 1 to 5") from None
+    if not 1 <= value <= 5:
+        raise ValueError("score must be an integer from 1 to 5")
+    return value
+
+
 def summarize(rows: list[dict[str, str]]) -> dict[str, object]:
     category_totals: dict[str, list[int]] = {}
     failures: list[dict[str, str]] = []
     for row in rows:
-        score = int(row.get("score", "0") or 0)
+        score = score_value(row)
         category = row.get("category", "unknown")
         category_totals.setdefault(category, []).append(score)
         if score <= 2:
@@ -45,7 +55,7 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, object]:
             {
                 "test_id": row.get("test_id", ""),
                 "category": row.get("category", ""),
-                "score": int(row.get("score", "0") or 0),
+                "score": score_value(row),
                 "reviewer_note": row.get("reviewer_note", ""),
             }
             for row in failures
@@ -73,7 +83,10 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="Print JSON summary.")
     args = parser.parse_args()
 
-    summary = summarize(load_rows(args.csv_path))
+    try:
+        summary = summarize(load_rows(args.csv_path))
+    except ValueError as error:
+        parser.error(str(error))
     if args.json:
         print(json.dumps(summary, indent=2, ensure_ascii=False))
     else:

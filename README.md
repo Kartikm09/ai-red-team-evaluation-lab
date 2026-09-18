@@ -90,3 +90,17 @@ Built a safe AI red-team evaluation lab for reviewing LLM outputs across safety 
 ## Safety Boundary
 
 This project is defensive and educational. It intentionally avoids operational jailbreak instructions, real client data, private client names, and content that would enable misuse.
+
+## Verification
+
+Run `make verify` (or `python3 -m unittest discover -s tests -v`). The
+standard-library suite uses independent synthetic fixtures and command-line
+checks, including malformed inputs. GitHub CI runs the same command on Python
+3.11. These checks verify the reporting code; they do not measure a live model
+or validate the truth of a human-assigned score.
+
+Score-reporting commands reject missing, blank, noninteger, or out-of-range
+scores with a clear error. The documented scale is 1–5; missing assessments
+are data errors and are not converted into model failures.
+
+See [repair scope and evidence](docs/verified-repair.md).
